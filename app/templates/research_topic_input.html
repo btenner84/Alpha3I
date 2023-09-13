@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Research Topic Input</title>
+    <style>
+        form div {
+            margin-bottom: 1em;
+        }
+        form label {
+            display: inline-block;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Research Topic Input</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+        <div>
+            <label for="industry">Industry:</label>
+            <input type="text" id="industry" name="industry">
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date">
+        </div>
+        <div>
+            <label for="context">Context:</label>
+            <textarea id="context" name="context"></textarea>
+        </div>
+        <div>
+            <label for="file">Upload File:</label>
+            <input type="file" id="file" name="file">
+        </div>
+        <div>
+            <label for="source">Source Base:</label>
+            <input type="text" id="source" name="source">
+        </div>
+
+        <button type="button" id="addSource">Add Source</button>
+
+        <table id="sourceList">
+            <!-- Dynamic source list will be added here -->
+        </table>
+
+    
+
+        <div>
+            <label for="questions">Questions:</label>
+            <div id="questionList">
+                <!-- Dynamic question list will be added here -->
+            </div>
+        </div>
+
+        <button type="button" id="addQuestion">Add Question</button>
+
+
+    <script>
+        document.getElementById('addSource').addEventListener('click', function() {
+            var sourceList = document.getElementById('sourceList');
+            var sourceCount = sourceList.rows.length;
+
+            if (sourceCount === 0) {
+                var headerRow = sourceList.insertRow(-1);
+                headerRow.innerHTML = `
+                    <th>#</th>
+                    <th>Source Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Job Title</th>
+                    <th>Organization</th>
+                    <th>Action</th>
+                `;
+                sourceCount++;
+            }
+
+            var newRow = sourceList.insertRow(-1);
+            newRow.innerHTML = `
+                <td>${sourceCount}.</td>
+                <td><input type="text" id="sourceName${sourceCount}" name="sourceName${sourceCount}"></td>
+                <td><input type="email" id="email${sourceCount}" name="email${sourceCount}"></td>
+                <td><input type="tel" id="phone${sourceCount}" name="phone${sourceCount}"></td>
+                <td><input type="text" id="jobTitle${sourceCount}" name="jobTitle${sourceCount}"></td>
+                <td><input type="text" id="organization${sourceCount}" name="organization${sourceCount}"></td>
+                <td><button type="button" onclick="removeSource(this)">Remove</button></td>
+            `;
+            document.getElementById('sourceCount').value = sourceCount;
+        });
+
+        document.getElementById('addQuestion').addEventListener('click', function() {
+            var questionList = document.getElementById('questionList');
+            var questionCount = questionList.childElementCount + 1;
+
+            var newQuestion = document.createElement('div');
+            newQuestion.innerHTML = `
+                <label for="question${questionCount}">Question ${questionCount}:</label>
+                <input type="text" id="question${questionCount}" name="question${questionCount}">
+            `;
+
+            questionList.appendChild(newQuestion);
+        });
+
+        function removeSource(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+<input type="hidden" id="sourceCount" name="sourceCount">
+<form method="POST" action="{{ url_for('main.research_topic_input') }}" enctype="multipart/form-data">
+    <!-- Your form fields here -->
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+{% endblock %}

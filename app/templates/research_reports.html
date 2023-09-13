@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Research Reports</h1>
+
+<ul>
+{% for report in reports %}
+    <li>
+        <h2>{{ report.title }}</h2>
+        <p>{{ report.date }}</p>
+        <!-- Display other report details here -->
+        <ul>
+        {% for source in report.sources %}
+            <li>{{ source }}</li>
+        {% endfor %}
+        </ul>
+        <ul>
+        {% for question in report.questions %}
+            <li>{{ question }}</li>
+        {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
